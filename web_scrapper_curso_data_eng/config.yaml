@@ -2,8 +2,12 @@ news_sites:
   eluniversal:
     url: https://www.eluniversal.com.mx
     queries: 
-      homepage_article_links: '.Ce6-Tipo2_Titulo'
+      homepage_article_links: '.ce6-Tipo1_Titulo a'
+      article_body: '.field-name-body'
+      article_title: '.h1'
   elpais: 
     url: https://elpais.com
     queries: 
       homepage_article_links: ''
+      article_body: ''
+      article_title: ''
