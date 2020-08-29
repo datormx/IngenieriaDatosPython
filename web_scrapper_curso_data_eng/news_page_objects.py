@@ -9,6 +9,7 @@ class NewsPage:
         self._config = config()['news_sites'][news_site_uid]
         self._queries = self._config['queries']
         self._html = None
+        self._url = url 
 
         self._visit(url)
 
@@ -33,7 +34,19 @@ class HomePage(NewsPage):
     @property
     def article_links(self):
         link_list = []
-        for link in self._select(self._queries['homepage_article_links']):
+        for link in self._select(self._queries['homepage_article_links_1']):
+            if link and link.has_attr('href'):
+                link_list.append(link)
+        
+        for link in self._select(self._queries['homepage_article_links_2']): #Se repite porque el universal no tiene una sola etiqueta para todos sus artículos
+            if link and link.has_attr('href'):
+                link_list.append(link)
+
+        for link in self._select(self._queries['homepage_article_links_3']):
+            if link and link.has_attr('href'):
+                link_list.append(link)
+
+        for link in self._select(self._queries['homepage_article_links_4']):
             if link and link.has_attr('href'):
                 link_list.append(link)
 
@@ -57,6 +70,10 @@ class ArticlePage(NewsPage):
         result = self._select(self._queries['article_title'])
 
         return result[0].text if len(result) else ''
+
+    @property
+    def url(self):
+        return self._url
 
 
 

@@ -2,7 +2,10 @@ news_sites:
   eluniversal:
     url: https://www.eluniversal.com.mx
     queries: 
-      homepage_article_links: '.ce6-Tipo1_Titulo a'
+      homepage_article_links_1: '.ce6-Tipo1_Titulo a'
+      homepage_article_links_2: '.ce3-Tipo1_Titulo a'
+      homepage_article_links_3: '.ce3-Tipo2_Titulo a'
+      homepage_article_links_4: '.ce2-Tipo1_Titulo a'
       article_body: '.field-name-body'
       article_title: '.h1'
   elpais: 
