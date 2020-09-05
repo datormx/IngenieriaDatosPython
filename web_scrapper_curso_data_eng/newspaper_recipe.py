@@ -3,6 +3,8 @@ import logging
 logging.basicConfig(level = logging.INFO)
 from urllib.parse import urlparse
 import hashlib
+import nltk
+from nltk.corpus import stopwords
 
 import pandas as pd
 
@@ -19,13 +21,19 @@ def run(filename):
     df = _fill_missing_titles(df)
     df = _generate_uids_for_rows(df)
     df = _remove_new_lines_from_body(df)
+    df = _tokenize_column(df, 'title')
+    df = _tokenize_column(df, 'body')    
 
     return df
+
 
 def _read_data(filename):
     logger.info(f'Reading file {filename}...')
 
-    return pd.read_csv(filename)
+    df = pd.read_csv(filename)
+    df.dropna(how='all', axis='columns', inplace=True) #Drop columnas completamente vacías
+
+    return df
 
 
 def _extract_newspaper_uid(filename):
@@ -91,6 +99,25 @@ def _remove_new_lines_from_body(df):
     df['body'] = stripped_body
 
     return df
+
+
+def _tokenize_column(df, column_name):
+    stop_words = set(stopwords.words('spanish'))
+
+    token_column = (df
+                .dropna()
+                .apply(lambda row: nltk.word_tokenize(row[column_name]), axis=1)
+                .apply(lambda tokens: list(filter(lambda token: token.isalpha(), tokens)))
+                .apply(lambda tokens: list(map(lambda token: token.lower(), tokens)))
+                .apply(lambda word_list: list(filter(lambda word: word not in stop_words, word_list)))
+                .apply(lambda valid_word_list: len(valid_word_list))
+            )
+
+    tokens_column_name = 'n_tokens_'+column_name
+    df[tokens_column_name] = token_column
+
+    return df
+
 
 
 if __name__ == "__main__":
