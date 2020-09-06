@@ -22,7 +22,10 @@ def run(filename):
     df = _generate_uids_for_rows(df)
     df = _remove_new_lines_from_body(df)
     df = _tokenize_column(df, 'title')
-    df = _tokenize_column(df, 'body')    
+    df = _tokenize_column(df, 'body')
+    df = _remove_duplicate_entries(df, 'title')
+    df = _drop_rows_with_missing_values(df)
+    _save_data(df, filename)
 
     return df
 
@@ -64,7 +67,7 @@ def _fill_missing_titles(df):
     missing_titles_mask = df['title'].isna()
 
     missing_titles = (df[missing_titles_mask]['url']
-                        .str.extract(r'(?P<missing_titles>[^/]+)')
+                        .str.extract(r'(?P<missing_titles>[^/]+)$')
                         .applymap(lambda title: title.split('-'))
                         .applymap(lambda title_word_list: ' '.join(title_word_list))
                      )
@@ -87,7 +90,7 @@ def _generate_uids_for_rows(df):
 
 
 def _remove_new_lines_from_body(df):
-    logger.info('Remove new lines from body')
+    logger.info('Remove new lines from body...')
 
     stripped_body = (df
                         .apply(lambda row: row['body'], axis=1)
@@ -118,7 +121,24 @@ def _tokenize_column(df, column_name):
 
     return df
 
+def _remove_duplicate_entries(df, column_name):
+    logger.info('Removing duplicated entries...')
+    df.drop_duplicates(subset=[column_name], keep='first', inplace=True)
 
+    return df
+
+
+def _drop_rows_with_missing_values(df):
+    logger.info('Dropping rows with missing values...')
+    
+    return df.dropna()
+
+
+def _save_data(df, filename):
+    clean_filename = f'_clean_{filename}'
+    logger.info(f'Saving data at location {clean_filename}')
+    df.to_csv(clean_filename)
+    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -129,3 +149,6 @@ if __name__ == "__main__":
 
     df = run(args.filename)
     print(df)
+
+
+
