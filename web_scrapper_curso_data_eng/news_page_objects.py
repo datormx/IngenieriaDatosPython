@@ -42,13 +42,13 @@ class HomePage(NewsPage):
             if link and link.has_attr('href'):
                 link_list.append(link)
 
-        for link in self._select(self._queries['homepage_article_links_3']):
-            if link and link.has_attr('href'):
-                link_list.append(link)
+        # for link in self._select(self._queries['homepage_article_links_3']):
+        #     if link and link.has_attr('href'):
+        #         link_list.append(link)
 
-        for link in self._select(self._queries['homepage_article_links_4']):
-            if link and link.has_attr('href'):
-                link_list.append(link)
+        # for link in self._select(self._queries['homepage_article_links_4']):
+        #     if link and link.has_attr('href'):
+        #         link_list.append(link)
 
         return set(link['href'] for link in link_list)
 

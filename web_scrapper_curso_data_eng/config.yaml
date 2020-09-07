@@ -8,9 +8,10 @@ news_sites:
       homepage_article_links_4: '.ce2-Tipo1_Titulo a'
       article_body: '.field-name-body'
       article_title: '.h1'
-  elpais: 
-    url: https://elpais.com
+  lajornada: 
+    url: https://www.jornada.com.mx/
     queries: 
-      homepage_article_links: ''
-      article_body: ''
-      article_title: ''
+      homepage_article_links_1: '.ljn-titles a'
+      homepage_article_links_2: '.ljn-title-nota-20 a'
+      article_body: '#content_nitf'
+      article_title: '.ljn-titles'
